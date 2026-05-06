@@ -10,8 +10,10 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Label } from "radix-ui";
 
 const navLinks = [
+  { label: "Home", href: "/" },
   { label: "About Us", href: "/About" },
   { label: "Pricing", href: "/Pricing" },
   { label: "Services", href: "/Services" },
