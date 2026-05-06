@@ -1,9 +1,11 @@
+'use client';
 
 import React, {
   createContext,
   useContext,
   useState,
   useEffect,
+  useMemo,
   useRef,
   ReactNode,
   FC,
@@ -52,6 +54,16 @@ interface SliderBtnProps {
   progressBarClass?: string;
 }
 
+const isSliderContentElement = (
+  child: ReactNode
+): child is React.ReactElement<SliderContentProps> =>
+  React.isValidElement(child) && child.type === SliderContent;
+
+const isSliderWrapperElement = (
+  child: ReactNode
+): child is React.ReactElement<SliderWrapperProps> =>
+  React.isValidElement(child) && child.type === SliderWrapper;
+
 // Create the context with an undefined initial value
 const ProgressSliderContext = createContext<
   ProgressSliderContextType | undefined
@@ -79,24 +91,56 @@ export const ProgressSlider: FC<ProgressSliderProps> = ({
   const [progress, setProgress] = useState<number>(0);
   const [isFastForward, setIsFastForward] = useState<boolean>(false);
   const frame = useRef<number>(0);
-  const firstFrameTime = useRef<number>(performance.now());
+  const firstFrameTime = useRef<number>(0);
+  const fastForwardStartProgress = useRef<number>(0);
   const targetValue = useRef<string | null>(null);
-  const [sliderValues, setSliderValues] = useState<string[]>([]);
 
-  useEffect(() => {
+  const sliderValues = useMemo(() => {
     const getChildren = React.Children.toArray(children).find(
-      (child) => (child as React.ReactElement).type === SliderContent
-    ) as React.ReactElement | undefined;
+      isSliderContentElement
+    );
 
-    if (getChildren) {
-      const values = React.Children.toArray(getChildren.props.children).map(
-        (child) => (child as React.ReactElement).props.value as string
-      );
-      setSliderValues(values);
+    if (!getChildren) {
+      return [];
     }
+
+    return React.Children.toArray(getChildren.props.children).flatMap((child) =>
+      isSliderWrapperElement(child) ? [child.props.value] : []
+    );
   }, [children]);
 
   useEffect(() => {
+    const animate = (now: number) => {
+      const currentDuration = isFastForward ? fastDuration : duration;
+      const elapsedTime = now - firstFrameTime.current;
+      const timeFraction = elapsedTime / currentDuration;
+
+      if (timeFraction <= 1) {
+        setProgress(
+          isFastForward
+            ? fastForwardStartProgress.current +
+                (100 - fastForwardStartProgress.current) * timeFraction
+            : timeFraction * 100
+        );
+        frame.current = requestAnimationFrame(animate);
+      } else {
+        if (isFastForward) {
+          setIsFastForward(false);
+          if (targetValue.current !== null) {
+            setActive(targetValue.current);
+            targetValue.current = null;
+          }
+        } else {
+          // Move to the next slide
+          const currentIndex = sliderValues.indexOf(active);
+          const nextIndex = (currentIndex + 1) % sliderValues.length;
+          setActive(sliderValues[nextIndex]);
+        }
+        setProgress(0);
+        firstFrameTime.current = performance.now();
+      }
+    };
+
     if (sliderValues.length > 0) {
       firstFrameTime.current = performance.now();
       frame.current = requestAnimationFrame(animate);
@@ -104,42 +148,13 @@ export const ProgressSlider: FC<ProgressSliderProps> = ({
     return () => {
       cancelAnimationFrame(frame.current);
     };
-  }, [sliderValues, active, isFastForward]);
-
-  const animate = (now: number) => {
-    const currentDuration = isFastForward ? fastDuration : duration;
-    const elapsedTime = now - firstFrameTime.current;
-    const timeFraction = elapsedTime / currentDuration;
-
-    if (timeFraction <= 1) {
-      setProgress(
-        isFastForward
-          ? progress + (100 - progress) * timeFraction
-          : timeFraction * 100
-      );
-      frame.current = requestAnimationFrame(animate);
-    } else {
-      if (isFastForward) {
-        setIsFastForward(false);
-        if (targetValue.current !== null) {
-          setActive(targetValue.current);
-          targetValue.current = null;
-        }
-      } else {
-        // Move to the next slide
-        const currentIndex = sliderValues.indexOf(active);
-        const nextIndex = (currentIndex + 1) % sliderValues.length;
-        setActive(sliderValues[nextIndex]);
-      }
-      setProgress(0);
-      firstFrameTime.current = performance.now();
-    }
-  };
+  }, [active, duration, fastDuration, isFastForward, sliderValues]);
 
   const handleButtonClick = (value: string) => {
     if (value !== active) {
       const elapsedTime = performance.now() - firstFrameTime.current;
       const currentProgress = (elapsedTime / duration) * 100;
+      fastForwardStartProgress.current = currentProgress;
       setProgress(currentProgress);
       targetValue.current = value;
       setIsFastForward(true);
