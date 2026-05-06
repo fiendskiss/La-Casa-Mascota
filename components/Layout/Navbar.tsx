@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { LockKeyhole, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -89,6 +89,16 @@ export default function Navbar() {
             >
               <Link href="/Booking">Book Now</Link>
             </Button>
+            <Button
+              asChild
+              aria-label="Admin login"
+              title="Admin login"
+              className="hidden h-11 w-11 rounded-full border border-[var(--accent-red)] bg-transparent p-0 text-[var(--accent-red)] shadow-none transition-all duration-200 hover:scale-[1.03] hover:bg-[var(--accent-red)] hover:text-white md:inline-flex"
+            >
+              <Link href="/admin/login">
+                <LockKeyhole size={18} aria-hidden="true" />
+              </Link>
+            </Button>
 
             {/* MOBILE MENU */}
             <Sheet open={open} onOpenChange={setOpen}>
@@ -115,13 +125,26 @@ export default function Navbar() {
                     </Link>
                   ))}
 
-                  <Button
-                    asChild
-                    className="mt-4 rounded-[1.3rem] bg-[var(--accent-red)] px-6 py-5 text-sm font-semibold uppercase text-white hover:bg-[var(--accent-red)]"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Link href="/Booking">Book Now</Link>
-                  </Button>
+                  <div className="mt-4 flex items-center gap-3">
+                    <Button
+                      asChild
+                      className="rounded-[1.3rem] bg-[var(--accent-red)] px-6 py-5 text-sm font-semibold uppercase text-white hover:bg-[var(--accent-red)]"
+                      onClick={() => setOpen(false)}
+                    >
+                      <Link href="/Booking">Book Now</Link>
+                    </Button>
+                    <Button
+                      asChild
+                      aria-label="Admin login"
+                      title="Admin login"
+                      className="h-11 w-11 rounded-full border border-[var(--accent-red)] bg-transparent p-0 text-[var(--accent-red)] hover:bg-[var(--accent-red)] hover:text-white"
+                      onClick={() => setOpen(false)}
+                    >
+                      <Link href="/admin/login">
+                        <LockKeyhole size={18} aria-hidden="true" />
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

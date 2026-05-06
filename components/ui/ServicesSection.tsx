@@ -61,7 +61,7 @@ export default function ServicesSection() {
   const section2Ref = useRef<HTMLDivElement>(null);
   const bgBallRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const bookBtnRef = useRef<HTMLButtonElement>(null);
+  const bookBtnRef = useRef<HTMLAnchorElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const photosRef = useRef<HTMLDivElement>(null);
   const foundRef = useRef<HTMLParagraphElement>(null);
@@ -335,13 +335,15 @@ export default function ServicesSection() {
           {/* Book Now circular button top-right */}
           <Link
             href="/Booking"
-            ref={bookBtnRef as any}
+            ref={bookBtnRef}
             style={{
               position: "absolute",
               top: "34%",
               left: "43%",
               width: "clamp(120px, 16vw, 220px)",
               height: "clamp(120px, 16vw, 220px)",
+              aspectRatio: "1 / 1",
+              flexShrink: 0,
               borderRadius: "50%",
               backgroundColor: "#e8d8d8",
               border: "none",
@@ -356,6 +358,7 @@ export default function ServicesSection() {
               textTransform: "uppercase",
               color: "var(--accent-red)",
               pointerEvents: "all",
+              zIndex: 20,
               transition: "background-color 0.25s ease",
               textDecoration: "none",
             }}
@@ -375,6 +378,7 @@ export default function ServicesSection() {
   <div
     style={{
       position: "relative",
+      zIndex: 1,
       width: "100%",
       background:" linear-gradient(to bottom, #efc6cf 40%, var(--cream) 100%)",
       overflow: "hidden",

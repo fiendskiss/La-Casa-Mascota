@@ -41,7 +41,7 @@ const AnimatedHeroDemo = () => {
           FOR HAPPY TAILS
         </div>
       }
-      description="Comfortable stays, playful days, and gentle care for every pet."
+      description=""
       ctaText="Explore services"
       images={DEMO_IMAGES}
     />

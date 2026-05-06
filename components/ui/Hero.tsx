@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { FaTiktok, FaWhatsapp, FaFacebook } from "react-icons/fa";
 
 export default function Hero() {
@@ -60,7 +59,7 @@ export default function Hero() {
         </div>
 
         {/* BOTTOM AREA */}
-        <div className="relative z-20 flex flex-col items-start justify-between gap-6 pb-8 pt-8 sm:flex-row sm:items-end -translate-y-20 sm:-translate-y-24 md:-translate-y-28 lg:-translate-y-30">
+        <div className="relative z-20 mt-6 flex flex-col items-start justify-between gap-6 pb-8 pt-8 sm:mt-8 sm:flex-row sm:items-end lg:mt-2">
 
           {/* SOCIALS */}
           <div className="flex items-center gap-3 sm:gap-4">
