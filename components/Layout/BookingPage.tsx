@@ -132,54 +132,53 @@ export default function BookingPage() {
     });
   };
 
-  // Send booking via email (mailto) — no reference number
-const sendBooking = async () => {
-  try {
-    setIsSending(true);
+  // Save booking request to Supabase.
+  const sendBooking = async () => {
+    try {
+      setIsSending(true);
 
-    const { error } = await supabase.from("bookings").insert([
-      {
-        // Owner
-        owner_name: pet.ownerName,
-        email: pet.email,
-        phone: pet.phone,
+      const { error } = await supabase.from("bookings").insert([
+        {
+          // Owner
+          owner_name: pet.ownerName,
+          email: pet.email,
+          phone: pet.phone,
 
-        // Service
-        service: selectedService?.label,
-        service_price: selectedService?.price,
+          // Service
+          service: selectedService?.label,
+          service_price: selectedService?.price,
 
-        // Schedule
-        booking_date: date,
-        time_slot: timeSlot,
+          // Schedule
+          booking_date: date,
+          time_slot: timeSlot,
 
-        // Pet
-        pet_name: pet.petName,
-        pet_type: pet.petType,
-        breed: pet.breed,
-        age: pet.age,
-        notes: pet.notes,
+          // Pet
+          pet_name: pet.petName,
+          pet_type: pet.petType,
+          breed: pet.breed,
+          age: pet.age,
+          notes: pet.notes,
 
-        // Admin defaults
-        status: "pending",
-        admin_notes: "",
-      },
-    ]);
+          // Admin defaults
+          status: "pending",
+          admin_notes: "",
+        },
+      ]);
 
-    if (error) {
-      console.error("Supabase error:", JSON.stringify(error, null, 2));
-      alert("Failed to save booking. Please try again.");
+      if (error) {
+        console.error("Supabase error:", JSON.stringify(error, null, 2));
+        alert("Failed to save booking. Please try again.");
+        setIsSending(false);
+        return;
+      }
+
       setIsSending(false);
-      return;
+      setStep(7);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      setIsSending(false);
     }
-
-    setIsSending(false);
-    setStep(7);
-
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    setIsSending(false);
-  }
-};
+  };
 
   const titleLines = STEP_TITLES[step]?.split("\n") || [];
 
@@ -377,8 +376,7 @@ const sendBooking = async () => {
               <p className="success-detail">
                 Thank you, <strong>{pet.ownerName}</strong>!<br />
                 Your booking for <strong>{pet.petName}</strong> has been submitted.<br /><br />
-                A confirmation email has been sent to <strong>{pet.email}</strong>.<br />
-                We&apos;ll also follow up at <strong>{pet.phone}</strong> to confirm your booking.
+                We&apos;ll follow up at <strong>{pet.phone}</strong> to confirm your booking.
               </p>
               <div className="email-note">
                 📧 Thank you for trusting us.
@@ -410,7 +408,7 @@ const sendBooking = async () => {
                 disabled={isSending}
                 onClick={sendBooking}
               >
-                {isSending ? "SENDING..." : "CONFIRM & SEND"} <span className="dot" />
+                {isSending ? "SAVING..." : "CONFIRM BOOKING"} <span className="dot" />
               </button>
               <button className="back-btn" onClick={() => setStep(5)}>← Back</button>
             </>
