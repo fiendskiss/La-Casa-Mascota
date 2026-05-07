@@ -4,6 +4,18 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) {
+    if (error.name === "AbortError") {
+      return "Supabase took too long to respond. Check your Vercel environment variables and Supabase project status.";
+    }
+
+    return error.message;
+  }
+
+  return "Something went wrong while signing in. Please try again.";
+}
+
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -16,19 +28,24 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError("");
 
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (authError) {
-      setError("Invalid credentials. Please try again.");
+      if (authError) {
+        setError("Invalid credentials. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      router.replace("/admin");
+      router.refresh();
+    } catch (err) {
+      setError(getErrorMessage(err));
       setLoading(false);
-      return;
     }
-
-    router.push("/admin");
-    router.refresh();
   };
 
   return (

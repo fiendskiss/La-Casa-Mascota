@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 
 type BookingStatus = "pending" | "confirmed" | "cancelled" | "completed";
 
-interface Booking {
+export interface Booking {
   id: string;
   created_at: string;
   owner_name: string;
