@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-[#2F5D73] pt-10 pb-10 bg-[var(--cream)]">
       
-      <div className="w-full px-20 grid md:grid-cols-[1fr_auto_auto] items-start gap-x-16">
+      <div className="w-full px-6 grid md:grid-cols-[1fr_auto_auto] items-start gap-x-16">
 
         {/* LEFT COLUMN */}
         <div className="flex items-start gap-4">
@@ -50,14 +50,6 @@ export default function Footer() {
             </Link>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="fade text-[#2F5D73] text-boldtext-sm space-y-3">
-          <p>PRIVACY POLICY</p>
-          <p>TERMS OF USE</p>
-          <p>FAQ</p>
-          <p>INSTAGRAM</p>
-          <p>TIK-TOK</p>
-        </div>
 
       </div>
 

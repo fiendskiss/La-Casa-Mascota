@@ -5,7 +5,7 @@ import { FaTiktok, FaWhatsapp, FaFacebook } from "react-icons/fa";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen overflow-hidden bg-#efc6cf pt-24 sm:pt-28 md:pt-32">
+    <section className="relative min-h-screen overflow-hidden bg-#efc6cf pt-16 sm:pt-20 md:pt-32 lg:pt-32">
       <div className="container-custom relative flex min-h-[90vh] flex-col justify-between px-4 sm:px-2">
 
         {/* TOP FLOATING MINI TEXT — desktop only */}
@@ -25,7 +25,7 @@ export default function Hero() {
         <div className="relative flex flex-1 flex-col justify-between lg:flex-row lg:items-start">
 
           {/* LEFT HEADING */}
-          <div className="relative z-10 max-w-[600px] mt-10 sm:mt-16 md:mt-20">
+          <div className="relative z-10 max-w-[600px] mt-4 sm:mt-8 md:mt-20 lg:mt-0">
             <h1 className="hero-text text-[var(--accent-red)]">
               A tired
               <br />
@@ -36,7 +36,7 @@ export default function Hero() {
           </div>
 
           {/* CENTER DOG IMAGE */}
-          <div className="absolute left-1/2 top-[48%] z-0 w-[120vw] max-w-[900px] -translate-x-1/2 -translate-y-1/2 sm:w-[90vw] md:w-[75vw] lg:top-[50%] lg:w-[85vw]">
+          <div className="absolute left-1/2 top-[44%] z-0 w-[120vw] max-w-[900px] -translate-x-1/2 -translate-y-1/2 sm:top-[45%] sm:w-[90vw] md:top-[48%] md:w-[75vw] lg:top-[50%] lg:w-[85vw]">
             <div className="relative aspect-[4/5] w-full">
               <Image
                 src="/Main.png"
@@ -62,7 +62,7 @@ export default function Hero() {
         <div className="relative z-20 mt-6 flex flex-col items-start justify-between gap-6 pb-8 pt-8 sm:mt-8 sm:flex-row sm:items-end lg:mt-2">
 
           {/* SOCIALS */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex -translate-y-28 items-center gap-3 sm:-translate-y-32 sm:gap-4 lg:-translate-y-12">
             <a
               href="https://tiktok.com"
               target="_blank"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -54,6 +54,7 @@ function BasketballLines({ className }: { className?: string }) {
 }
 
 export default function ServicesSection() {
+  const [isBookButtonActive, setIsBookButtonActive] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const ballRef = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLDivElement>(null);
@@ -304,18 +305,20 @@ export default function ServicesSection() {
         {/* ── SECTION 2 content overlaid (fades in during pin) ─────────── */}
         <div
           ref={section2Ref}
+          className="services-section-overlay"
           style={{
             position: "absolute",
             inset: 0,
             opacity: 0,
             zIndex: 5,
             background: "linear-gradient(to bottom, #efc6cf 0%)",
-            pointerEvents: "none",
+            pointerEvents: "auto",
           }}
         >
           {/* Heading top-left */}
           <h2
             ref={headingRef}
+            className="services-section-heading"
             style={{
               position: "relative",
               top: "11vh",
@@ -336,6 +339,8 @@ export default function ServicesSection() {
           <Link
             href="/Booking"
             ref={bookBtnRef}
+            className="services-section-book"
+            data-active={isBookButtonActive ? "true" : undefined}
             style={{
               position: "absolute",
               top: "34%",
@@ -357,19 +362,31 @@ export default function ServicesSection() {
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               color: "var(--accent-red)",
-              pointerEvents: "all",
+              pointerEvents: "auto",
               zIndex: 20,
-              transition: "background-color 0.25s ease",
+              transition: "background-color 0.25s ease, color 0.25s ease",
               textDecoration: "none",
+              touchAction: "manipulation",
             }}
             onMouseEnter={(e) => {
+              setIsBookButtonActive(true);
               (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "var(--accent-red)";
               (e.currentTarget as HTMLAnchorElement).style.color = "#f0e8e8";
             }}
             onMouseLeave={(e) => {
+              setIsBookButtonActive(false);
               (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#e8d8d8";
               (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-red)";
             }}
+            onPointerEnter={() => setIsBookButtonActive(true)}
+            onPointerLeave={() => setIsBookButtonActive(false)}
+            onPointerDown={() => setIsBookButtonActive(true)}
+            onPointerCancel={() => setIsBookButtonActive(false)}
+            onPointerUp={() => setIsBookButtonActive(false)}
+            onFocus={() => setIsBookButtonActive(true)}
+            onBlur={() => setIsBookButtonActive(false)}
+            onTouchStart={() => setIsBookButtonActive(true)}
+            onTouchEnd={() => setIsBookButtonActive(false)}
           >
             BOOK NOW •
           </Link>
@@ -480,6 +497,40 @@ export default function ServicesSection() {
       {/* Google Font import */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&display=swap');
+
+        .services-section-book {
+          pointer-events: auto !important;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .services-section-book:hover,
+        .services-section-book:active,
+        .services-section-book:focus-visible,
+        .services-section-book[data-active="true"] {
+          background-color: var(--accent-red) !important;
+          color: #f0e8e8 !important;
+        }
+
+        @media (max-width: 767px) {
+          .services-section-heading {
+            left: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 0 1.25rem !important;
+            text-align: center !important;
+            font-size: clamp(3rem, 16vw, 4.5rem) !important;
+          }
+
+          .services-section-book {
+            top: 31vh !important;
+            left: 0 !important;
+            right: 0 !important;
+            margin-inline: auto !important;
+            translate: none !important;
+            width: clamp(108px, 32vw, 140px) !important;
+            height: clamp(108px, 32vw, 140px) !important;
+          }
+        }
       `}</style>
     </>
   );
