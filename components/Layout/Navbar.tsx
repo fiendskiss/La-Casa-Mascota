@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Label } from "radix-ui";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -114,6 +114,7 @@ export default function Navbar() {
                 side="right"
                 className="border-l-0 bg-[var(--cream)] px-8 pt-16 w-[80vw] sm:w-[60vw]"
               >
+                <SheetTitle className="sr-only">Navigation menu</SheetTitle>
                 <div className="flex flex-col gap-6">
                   {navLinks.map((link) => (
                     <Link
